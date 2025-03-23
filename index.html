@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Service</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <h1>Payment Service</h1>
+    <button id="pay-button">Pay with PayPal</button>
+
+    <script>
+        document.getElementById('pay-button').addEventListener('click', () => {
+            fetch('/create-payment', {
+                method: 'POST',
+            })
+            .then((response) => {
+                return response.json();
+            })
+            .then((data) => {
+                if (data.approval_url) {
+                    window.location.href = data.approval_url;  // Redirect to PayPal
+                } else {
+                    alert('Error creating payment: ' + data.error);
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>
